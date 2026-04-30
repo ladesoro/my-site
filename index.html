@@ -286,6 +286,36 @@
     } else {
       weatherWidget.init();
     }
+
+    // Weather Widget Scroll Handler
+    const weatherWidgetElement = document.getElementById('weatherWidget');
+    let lastScrollTop = 0;
+    const scrollThreshold = 300;
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > scrollThreshold) {
+        weatherWidgetElement.classList.add('condensed');
+      } else {
+        weatherWidgetElement.classList.remove('condensed');
+      }
+      
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+
+    // Expand on hover
+    weatherWidgetElement.addEventListener('mouseenter', () => {
+      weatherWidgetElement.classList.remove('condensed');
+    });
+
+    // Re-condense on mouse leave if scrolled past threshold
+    weatherWidgetElement.addEventListener('mouseleave', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollTop > scrollThreshold) {
+        weatherWidgetElement.classList.add('condensed');
+      }
+    });
   </script>
 </body>
 </html>

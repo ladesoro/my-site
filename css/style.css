@@ -615,6 +615,23 @@ footer {
   z-index: 100;
   backdrop-filter: blur(10px);
   animation: slideInRight 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.weather-widget.condensed {
+  width: auto;
+  padding: 0.75rem;
+  top: 90px;
+}
+
+.weather-widget:hover {
+  animation: none;
+}
+
+.weather-widget:hover.condensed {
+  width: 200px;
+  padding: 1.5rem;
+  top: 100px;
 }
 
 @keyframes slideInRight {
@@ -662,6 +679,13 @@ footer {
   align-items: center;
   gap: 0.75rem;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.weather-widget.condensed .weather-content {
+  flex-direction: row;
+  gap: 0.5rem;
+  text-align: left;
 }
 
 .weather-icon {
@@ -670,6 +694,15 @@ footer {
   color: var(--secondary);
   margin-bottom: 0.5rem;
   animation: float 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.weather-widget.condensed .weather-icon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0;
+  animation: none;
 }
 
 @keyframes float {
@@ -692,23 +725,39 @@ footer {
   font-weight: 800;
   color: var(--primary);
   line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.weather-widget.condensed .weather-temp {
+  font-size: 1.25rem;
 }
 
 .weather-condition {
   font-size: 0.95rem;
   color: var(--text);
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.weather-widget.condensed .weather-condition {
+  display: none;
 }
 
 .weather-location {
   font-size: 0.75rem;
   color: var(--medium-gray);
   margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.weather-widget.condensed .weather-location {
+  display: none;
 }
 
 .weather-fallback {
   text-align: center;
   padding: 0.5rem 0;
+  transition: all 0.3s ease;
 }
 
 .weather-fallback p {
@@ -716,6 +765,12 @@ footer {
   color: var(--dark-gray);
   margin: 0;
   line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+.weather-widget.condensed .weather-fallback p {
+  font-size: 0;
+  display: none;
 }
 
 /* Responsive Design */
