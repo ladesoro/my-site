@@ -30,6 +30,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
 /* Typography */
 h1 {
   font-size: 3.5rem;

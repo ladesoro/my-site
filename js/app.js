@@ -95,13 +95,16 @@ const weatherWidget = {
     const locationElement = document.getElementById('weatherLocation');
     const contentElement = document.getElementById('weatherContent');
     const loadingElement = document.querySelector('.weather-loading');
+    const fallbackElement = document.getElementById('weatherFallback');
 
     iconElement.innerHTML = this.icons[weatherInfo.icon];
     tempElement.textContent = `${temp}°F`;
     conditionElement.textContent = weatherInfo.condition;
     locationElement.textContent = locationName;
 
+    // Hide loading and fallback, show content
     loadingElement.classList.add('hidden');
+    fallbackElement.classList.add('hidden');
     contentElement.classList.remove('hidden');
   },
 
@@ -109,8 +112,11 @@ const weatherWidget = {
     console.log('Weather widget error:', error);
     const loadingElement = document.querySelector('.weather-loading');
     const fallbackElement = document.getElementById('weatherFallback');
+    const contentElement = document.getElementById('weatherContent');
     
+    // Hide loading and content, show fallback
     loadingElement.classList.add('hidden');
+    contentElement.classList.add('hidden');
     fallbackElement.classList.remove('hidden');
   }
 };
