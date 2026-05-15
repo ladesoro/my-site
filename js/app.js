@@ -51,8 +51,9 @@ const weatherWidget = {
 
   async getWeather(latitude, longitude) {
     try {
+      // Use open-meteo's current_weather parameter which returns a stable shape
       const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit`
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&temperature_unit=fahrenheit`
       );
       const data = await response.json();
       await this.displayWeather(data, latitude, longitude);
@@ -81,10 +82,11 @@ const weatherWidget = {
   },
 
   async displayWeather(data, latitude, longitude) {
-    const current = data.current;
-    const weatherCode = current.weather_code;
+    // Support both `current_weather` (open-meteo) and legacy `current` shapes
+    const current = data.current_weather || data.current || {};
+    const weatherCode = current.weathercode || current.weather_code || 0;
     const weatherInfo = this.weatherCodes[weatherCode] || { condition: 'Unknown', icon: 'cloud' };
-    const temp = Math.round(current.temperature_2m);
+    const temp = Math.round(current.temperature || current.temperature_2m || 0);
     
     // Get location name
     const locationName = await this.getLocation(latitude, longitude);
@@ -128,32 +130,36 @@ if (document.readyState === 'loading') {
   weatherWidget.init();
 }
 
-// Weather Widget Scroll Handler
+// Weather Widget Scroll + Hover Handlers (guarded)
 const weatherWidgetElement = document.getElementById('weatherWidget');
 let lastScrollTop = 0;
 const scrollThreshold = 300;
 
-window.addEventListener('scroll', () => {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  
-  if (scrollTop > scrollThreshold) {
-    weatherWidgetElement.classList.add('condensed');
-  } else {
+if (weatherWidgetElement) {
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop > scrollThreshold) {
+      weatherWidgetElement.classList.add('condensed');
+    } else {
+      weatherWidgetElement.classList.remove('condensed');
+    }
+    
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+  });
+
+  // Expand on hover
+  weatherWidgetElement.addEventListener('mouseenter', () => {
     weatherWidgetElement.classList.remove('condensed');
-  }
-  
-  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-});
+  });
 
-// Expand on hover
-weatherWidgetElement.addEventListener('mouseenter', () => {
-  weatherWidgetElement.classList.remove('condensed');
-});
-
-// Re-condense on mouse leave if scrolled past threshold
-weatherWidgetElement.addEventListener('mouseleave', () => {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  if (scrollTop > scrollThreshold) {
-    weatherWidgetElement.classList.add('condensed');
-  }
-});
+  // Re-condense on mouse leave if scrolled past threshold
+  weatherWidgetElement.addEventListener('mouseleave', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > scrollThreshold) {
+      weatherWidgetElement.classList.add('condensed');
+    }
+  });
+} else {
+  console.warn('Weather widget element not found; skipping widget event handlers.');
+}
