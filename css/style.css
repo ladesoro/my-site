@@ -192,6 +192,8 @@ nav {
   color: var(--secondary);
   margin-bottom: 1.5rem;
   animation: slideInUp 0.8s ease-out;
+  padding-right: 3rem;
+  max-width: 40ch;
 }
 
 .hero-subtitle {
