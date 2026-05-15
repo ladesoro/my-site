@@ -496,7 +496,7 @@ nav {
 }
 
 .tag {
-  background: #ffa2B6);
+  background: var(--accent-pink);
   color: var(--secondary);
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
@@ -605,7 +605,7 @@ nav {
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 12px 35px var(--accent-teal);
-
+}
 
 .contact-links a:hover::before {
   width: 300px;
